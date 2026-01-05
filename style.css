@@ -73,3 +73,52 @@ button:hover {
 
 .correct { color: green; font-weight: bold; }
 .wrong { color: red; font-weight: bold; }
+
+.number-line {
+    position: relative;
+    height: 50px;
+    margin: 15px 0;
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.line {
+    position: absolute;
+    top: 50%;
+    left: 5%;
+    width: 90%;
+    height: 4px;
+    background: #555;
+    transform: translateY(-50%);
+}
+
+.tick {
+    position: absolute;
+    top: 10px;
+    font-size: 12px;
+    transform: translateX(-50%);
+}
+
+.point {
+    position: absolute;
+    top: 50%;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 12px;
+    text-align: center;
+    line-height: 18px;
+}
+
+.point.a { background: #2196f3; }
+.point.b { background: #ff5722; }
+
+.correct-point {
+    border: 3px solid green;
+}
+
+.wrong-point {
+    border: 3px solid red;
+}
