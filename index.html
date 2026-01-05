@@ -2,29 +2,50 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Integer Number Line Quiz</title>
+    <title>Compare Integers Using a Number Line</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="container">
-    <h1>📊 Compare Integers Using a Number Line</h1>
+    <h1> Compare Integers Using a Number Line</h1>
+    <p style="text-align:center;">
+        Enter your name to begin. Select the greater number using the number line.
+    </p>
 
+    <!-- Controls -->
     <div class="controls">
-        <input type="text" id="studentName" placeholder="Enter your name">
+        <input 
+            type="text" 
+            id="studentName" 
+            placeholder="Enter your full name *"
+            required
+        >
+
         <select id="difficulty">
-            <option value="10">Easy</option>
-            <option value="20" selected>Medium</option>
-            <option value="50">Challenge</option>
+            <option value="10">Easy (−10 to 10)</option>
+            <option value="20" selected>Medium (−20 to 20)</option>
+            <option value="50">Challenge (−50 to 50)</option>
         </select>
+
+        <input 
+            type="password" 
+            id="teacherCode" 
+            placeholder="Teacher access code (optional)"
+        >
+
         <button onclick="startQuiz()">Start Quiz</button>
     </div>
 
+    <!-- Quiz Area -->
     <form id="quizForm"></form>
 
+    <!-- Action Buttons -->
     <button id="submitBtn" style="display:none;">Submit Quiz</button>
     <button id="downloadBtn" style="display:none;">Download Results (Teacher)</button>
 
+    <!-- Results -->
     <div id="result"></div>
 </div>
 
