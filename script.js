@@ -1,5 +1,6 @@
 let quizData = [];
 let results = [];
+const TEACHER_SECRET = "MAHI2026"; // 🔐 change this anytime
 
 function randomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -10,6 +11,12 @@ function map(num, range) {
 }
 
 function startQuiz() {
+    const name = document.getElementById("studentName").value.trim();
+    if (!name) {
+        alert("Please enter your name before starting the quiz.");
+        return;
+    }
+
     document.getElementById("quizForm").innerHTML = "";
     document.getElementById("result").innerHTML = "";
     document.getElementById("submitBtn").style.display = "block";
@@ -17,7 +24,7 @@ function startQuiz() {
 
     const range = Number(document.getElementById("difficulty").value);
     quizData = [];
-    
+
     for (let i = 0; i < 30; i++) {
         let a = randomInt(-range, range);
         let b;
@@ -38,8 +45,8 @@ function startQuiz() {
 
             <div class="number-line">
                 <div class="line"></div>
-                <div class="point a" style="left:${map(q.a, range)}%">${q.a}</div>
-                <div class="point b" style="left:${map(q.b, range)}%">${q.b}</div>
+                <div class="point" style="left:${map(q.a, range)}%">${q.a}</div>
+                <div class="point" style="left:${map(q.b, range)}%">${q.b}</div>
             </div>
 
             <div class="options">
@@ -54,7 +61,7 @@ function startQuiz() {
             input.addEventListener("change", () => {
                 const feedback = div.querySelector(".feedback");
                 if (Number(input.value) === q.correct) {
-                    feedback.innerHTML = "<span class='correct-text'>✔ Correct!</span>";
+                    feedback.innerHTML = "<span class='correct-text'>✔ Correct</span>";
                 } else {
                     feedback.innerHTML = `<span class='wrong-text'>✖ Incorrect. Correct answer: ${q.correct}</span>`;
                 }
@@ -67,7 +74,8 @@ function startQuiz() {
 
 document.getElementById("submitBtn").onclick = () => {
     let score = 0;
-    const name = document.getElementById("studentName").value || "Anonymous";
+    const name = document.getElementById("studentName").value.trim();
+    const teacherCode = document.getElementById("teacherCode").value;
 
     quizData.forEach((q, i) => {
         const answer = document.querySelector(`input[name="q${i}"]:checked`);
@@ -75,8 +83,13 @@ document.getElementById("submitBtn").onclick = () => {
     });
 
     results.push({ name, score });
-    document.getElementById("result").innerHTML = `🎉 ${name}, your score is ${score}/30`;
-    document.getElementById("downloadBtn").style.display = "block";
+
+    document.getElementById("result").innerHTML =
+        `🎉 ${name}, your score is ${score}/30`;
+
+    if (teacherCode === TEACHER_SECRET) {
+        document.getElementById("downloadBtn").style.display = "block";
+    }
 };
 
 document.getElementById("downloadBtn").onclick = () => {
