@@ -1,69 +1,84 @@
-// Helper function to get random integer between min and max
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-// Generate random integer comparison questions
-function generateRandomQuestions(n = 30) {
+function generateQuestions(count = 30) {
     const questions = [];
-    for (let i = 0; i < n; i++) {
-        const a = getRandomInt(-20, 20);
+    for (let i = 0; i < count; i++) {
+        let a = getRandomInt(-20, 20);
         let b;
-        do {
-            b = getRandomInt(-20, 20);
-        } while (b === a); // ensure different numbers
+        do { b = getRandomInt(-20, 20); } while (b === a);
 
         questions.push({
-            q: `Compare the numbers: ${a} and ${b}. Which is greater?`,
-            a: [a, b, "They are equal"],
-            correct: a > b ? 0 : (b > a ? 1 : 2),
-            aNum: a,
-            bNum: b
+            a,
+            b,
+            question: `Compare the numbers ${a} and ${b}. Which is greater?`,
+            options: [a, b, "They are equal"],
+            correct: a > b ? 0 : 1
         });
     }
-    return questions;
+    return questions.sort(() => Math.random() - 0.5);
 }
 
-// Randomize array
-function shuffleArray(array) {
-    return array.sort(() => Math.random() - 0.5);
-}
-
-// Generate quiz
-const quizData = shuffleArray(generateRandomQuestions(30));
+const quizData = generateQuestions();
 const form = document.getElementById("quizForm");
 
-quizData.forEach((item, index) => {
-    const questionDiv = document.createElement("div");
-    questionDiv.classList.add("question");
-    questionDiv.innerHTML = `
-        <p><strong>Q${index + 1}:</strong> ${item.q}</p>
+function mapToLine(num) {
+    return ((num + 20) / 40) * 90 + 5;
+}
+
+quizData.forEach((q, index) => {
+    const qDiv = document.createElement("div");
+    qDiv.className = "question";
+
+    qDiv.innerHTML = `
+        <p><strong>Q${index + 1}:</strong> ${q.question}</p>
+
+        <div class="number-line">
+            <div class="line"></div>
+            <div class="point a" style="left:${mapToLine(q.a)}%">${q.a}</div>
+            <div class="point b" style="left:${mapToLine(q.b)}%">${q.b}</div>
+        </div>
+
         <div class="options">
-            ${item.a.map((option, i) => `
+            ${q.options.map((opt, i) => `
                 <label>
-                    <input type="radio" name="q${index}" value="${i}"> ${option}
+                    <input type="radio" name="q${index}" value="${i}">
+                    ${opt}
                 </label>
-            `).join('')}
+            `).join("")}
         </div>
     `;
-    form.appendChild(questionDiv);
+    form.appendChild(qDiv);
 });
 
-// Submit quiz
 document.getElementById("submitBtn").addEventListener("click", () => {
     let score = 0;
-    const resultDiv = document.getElementById("result");
-    let feedback = "<h3>Review:</h3>";
+    let feedback = "<h3>📌 Review Your Mistakes</h3>";
 
-    quizData.forEach((item, index) => {
+    quizData.forEach((q, index) => {
         const answer = form[`q${index}`].value;
-        const qText = `Q${index+1}: ${item.q}`;
-        if(answer == item.correct) {
+        const qBlock = form.children[index];
+        const points = qBlock.querySelectorAll(".point");
+
+        if (answer == q.correct) {
             score++;
+            points[q.correct].classList.add("correct-point");
         } else {
-            feedback += `<p class="wrong">${qText}<br> Your answer: ${answer !== undefined ? item.a[answer] : "No answer"} | Correct answer: <span class="correct">${item.a[item.correct]}</span></p>`;
+            if (answer !== undefined) {
+                points[answer].classList.add("wrong-point");
+            }
+            points[q.correct].classList.add("correct-point");
+
+            feedback += `
+                <p class="wrong">
+                    Q${index + 1}: ${q.question}<br>
+                    Correct answer: <span class="correct">${q.options[q.correct]}</span>
+                </p>
+            `;
         }
     });
 
-    resultDiv.innerHTML = `✅ Your Score: ${score} / ${quizData.length}` + feedback;
+    document.getElementById("result").innerHTML =
+        `🎉 Your Score: ${score} / ${quizData.length}` + feedback;
 });
