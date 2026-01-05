@@ -2,21 +2,32 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skill 2: Compare Integers using Number Line Quiz</title>
+    <title>Integer Number Line Quiz</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>🎯 Compare Integers Using a Number Line</h1>
-        <p>Answer the questions by selecting the correct option!</p>
-        
-        <form id="quizForm"></form>
-        
-        <button id="submitBtn">Submit Quiz</button>
-        <div id="result"></div>
+
+<div class="container">
+    <h1>📊 Compare Integers Using a Number Line</h1>
+
+    <div class="controls">
+        <input type="text" id="studentName" placeholder="Enter your name">
+        <select id="difficulty">
+            <option value="10">Easy</option>
+            <option value="20" selected>Medium</option>
+            <option value="50">Challenge</option>
+        </select>
+        <button onclick="startQuiz()">Start Quiz</button>
     </div>
-    
-    <script src="script.js"></script>
+
+    <form id="quizForm"></form>
+
+    <button id="submitBtn" style="display:none;">Submit Quiz</button>
+    <button id="downloadBtn" style="display:none;">Download Results (Teacher)</button>
+
+    <div id="result"></div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
